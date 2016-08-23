@@ -37,6 +37,15 @@ void init_cmd_buf(char **cmd)
 	}
 }
 
+void cleanup(char **cmd)
+{
+	int i;
+	for (i = 0; i < TOKEN_NB; ++i)
+	{
+		free(cmd[i]);
+	}
+}
+
 // Tokenize the user input to pass to the shell command by using strktok
 // and strcpy to copy the token to the cmd buffer
 //
@@ -124,6 +133,9 @@ int main(void)
 		printf("> ");
 	}
 
+	cleanup(cmd);
+	free(cmd);
+	free(input);
 	printf("\n");
 	return 0;
 }
