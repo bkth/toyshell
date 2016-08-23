@@ -21,6 +21,9 @@
 //	COMMAND SUBSTITUTION
 
 
+char *backup_addr;
+int backup_idx;
+
 // Init the command buffer which is an array of string (char **)
 // each string is allocated as buffer of BUFF_SIZE bytes 
 void init_cmd_buf(char **cmd)
@@ -64,7 +67,14 @@ void tokenize(char **cmd, char *input)
 	}
 
 	// exec calls take expect an array terminated by a null pointer
+	backup_addr = cmd[i];
+	backup_idx = i;
 	cmd[i] = NULL;
+}
+
+void restore(char **cmd)
+{
+	cmd[backup_idx] = backup_addr;
 }
 
 // handles the actual shell work
@@ -129,7 +139,8 @@ int main(void)
 #endif		
 		tokenize(cmd, input);		
 		
-		shell(cmd);	
+		shell(cmd);
+		restore(cmd);	
 		printf("> ");
 	}
 
